@@ -4,5 +4,6 @@ services:
   - docker
 
 script:
+  - docker login -u $DOCKER_USER -p $DOCKER_PASS
   - docker build -t forabi/hollowverse-gae --file Dockerfile-env ./
   - docker push forabi/hollowverse-gae
