@@ -24,8 +24,8 @@ WORKDIR /hollowverse
 # the key we added with the Travis command line tool
 CMD \
   openssl aes-256-cbc \
-    -K $encrypted_744738cd0ff8_key \
-    -iv $encrypted_744738cd0ff8_iv \
+    -K $KEY \
+    -iv $IV \
     -in gae-client-secret.json.enc \
     -out gae-client-secret.json \
     -d \
