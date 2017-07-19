@@ -7,6 +7,4 @@ script:
   - docker build --file Dockerfile-env ./
   - export CONTAINER_ID=$(docker run -d -t)
   - docker commit $CONTAINER_ID forabi/hollowverse-gae
-
-deploy:
   - docker push forabi/hollowverse-gae
