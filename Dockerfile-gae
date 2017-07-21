@@ -30,4 +30,6 @@ CMD \
     -out gae-client-secret.json \
     -d \
   && \
+    gcloud auth activate-service-account $SERVICE_ACCOUNT --key-file gae-client-secret.json \
+  && \
     gcloud app deploy --version $BRANCH --project $PROJECT --no-promote
