@@ -32,4 +32,4 @@ CMD \
   && \
     gcloud auth activate-service-account $SERVICE_ACCOUNT --key-file gae-client-secret.json \
   && \
-    gcloud app deploy --version $BRANCH --project $PROJECT --no-promote
+    gcloud app deploy app.yaml letsEncrypt/app.yaml dispatch.yaml --version $BRANCH --project $PROJECT --no-promote
