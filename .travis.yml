@@ -4,9 +4,10 @@ services:
   - docker
 
 script:
-  - docker login -u "${DOCKER_USER}" -p "${DOCKER_PASS}"
-    && docker build -t hollowverse/hollowverse-gae --file Dockerfile-gae ./
-    && docker push hollowverse/hollowverse-gae
+  - docker build -t hollowverse/hollowverse-gae --file Dockerfile-gae ./
+  - if [[ ($TRAVIS_PULL_REQUEST == "false") && ($TRAVIS_BRANCH == "master") ]]; then 
+      docker login -u "${DOCKER_USER}" -p "${DOCKER_PASS}" && docker push hollowverse/hollowverse-gae;
+    fi
 
 notifications:
   email: false
