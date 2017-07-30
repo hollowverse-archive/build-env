@@ -29,6 +29,7 @@ CMD \
     -in gae-client-secret.json.enc \
     -out gae-client-secret.json \
     -d \
+  && cp ./gae-client-secret.json ./letsEncrypt \
   && \
     gcloud auth activate-service-account $SERVICE_ACCOUNT --key-file gae-client-secret.json \
   && \
