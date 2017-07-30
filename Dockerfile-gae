@@ -33,6 +33,6 @@ CMD \
   && \
     gcloud auth activate-service-account $SERVICE_ACCOUNT --key-file gae-client-secret.json \
   && \
-    gcloud app deploy letsEncrypt/app.yaml --project $PROJECT --version master \
+    (if [[ $BRANCH == 'master' ]]; then gcloud app deploy letsEncrypt/app.yaml --project $PROJECT --version master; fi) \
   && \
     gcloud app deploy app.yaml dispatch.yaml --version $BRANCH --project $PROJECT --no-promote
