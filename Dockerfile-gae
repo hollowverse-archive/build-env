@@ -18,21 +18,8 @@ RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 RUN apt-get update
 RUN apt-get install google-cloud-sdk -y
 
-WORKDIR /hollowverse
+ADD ./deploy.sh .
 
 # Decrypt the credentials we added to the repo using
 # the key we added with the Travis command line tool
-CMD \
-  openssl aes-256-cbc \
-    -K $KEY \
-    -iv $IV \
-    -in gae-client-secret.json.enc \
-    -out gae-client-secret.json \
-    -d \
-  && cp ./gae-client-secret.json ./letsEncrypt \
-  && \
-    gcloud auth activate-service-account $SERVICE_ACCOUNT --key-file gae-client-secret.json \
-  && \
-    (if [[ $BRANCH == 'master' ]]; then gcloud app deploy letsEncrypt/app.yaml --project $PROJECT --version master; fi) \
-  && \
-    gcloud app deploy app.yaml dispatch.yaml --version $BRANCH --project $PROJECT --no-promote
+CMD /bin/bash /deploy.sh
