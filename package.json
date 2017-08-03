@@ -1,0 +1,12 @@
+{
+  "name": "hollowverse-docker",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.js",
+  "repository": "git@github.com:hollowverse/hollowverse-docker.git",
+  "author": "Muhammad Fawwaz Orabi <mfawwaz93@gmail.com>",
+  "license": "Unlicense",
+  "dependencies": {
+    "shelljs": "^0.7.8"
+  }
+}
