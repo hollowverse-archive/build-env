@@ -21,8 +21,8 @@ function executeCommands(commands) {
     if (typeof command === 'function') {
       code = command();
     } else {
+      command = command.replace('\n', '').replace(/\s+/g, ' ').trim();
       console.info(command);
-      command = command.replace('\n', '').replace(/\s+/g, ' ').trim()
       code = shelljs.exec(command).code;
     }
   }
