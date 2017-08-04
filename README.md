@@ -1,5 +1,6 @@
 Docker environment images for Hollowverse
 ==========================================
+[![Build Status](https://travis-ci.org/hollowverse/hollowverse-docker.svg?branch=master)](https://travis-ci.org/hollowverse/hollowverse)
 
 This repository contains all the environment images used to build and deploy Hollowverse.
 
