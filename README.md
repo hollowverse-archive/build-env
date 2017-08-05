@@ -6,6 +6,8 @@ This repository contains all the environment images used to build and deploy Hol
 
 An environment image is an image that contains all the tools needed to deploy the application. It does not contain the actual source code for the app to be built. The source code should be mounted into the container at runtime.
 
+The continuous deployment process is [documented in detail on Medium](https://medium.com/hollowverse/automating-deployment-to-google-app-engine-with-docker-and-travis-b8a8edb3ec31).
+
 ## `Dockerfile-gae`
 This Docker image contains the Google Cloud SDK (`gcloud` command line tool) and expects that the source code is mounted at `/hollowverse` inside the container.
 
