@@ -5,8 +5,19 @@
 
 const shelljs = require('shelljs');
 const fs = require('fs');
+const path = require('path');
 
-const { KEY, IV, PROJECT, BRANCH, SERVICE_ACCOUNT } = shelljs.env;
+const {
+  ENC_KEY_SUMO,
+  ENC_IV_SUMO,
+  ENC_KEY_TRAVIS_SERVICE_ACCOUNT,
+  ENC_IV_TRAVIS_SERVICE_ACCOUNT,
+  ENC_KEY_LETS_ENCRYPT_SERVICE_ACCOUNT,
+  ENC_IV_LETS_ENCRYPT_SERVICE_ACCOUNT,
+  PROJECT,
+  BRANCH,
+  SERVICE_ACCOUNT
+} = shelljs.env;
 
 /**
  * A helper function that executes shell commands or JavaScript functions.
@@ -93,19 +104,46 @@ function tryDeploy(maxNumAttempts = 5) {
   return code;
 }
 
+const secrets = [
+  {
+    key: ENC_KEY_SUMO,
+    iv: ENC_IV_SUMO,
+    decryptedFilename: 'sumo.json',
+  },
+  {
+    key: ENC_KEY_TRAVIS_SERVICE_ACCOUNT,
+    iv: ENC_KEY_TRAVIS_SERVICE_ACCOUNT,
+    decryptedFilename: 'gcloud.travis.json',
+  },
+  {
+    key: ENC_KEY_LETS_ENCRYPT_SERVICE_ACCOUNT,
+    iv: ENC_IV_LETS_ENCRYPT_SERVICE_ACCOUNT,
+    decryptedFilename: 'gcloud.letsEncrypt.json',
+  },
+];
+
+function decryptSecrets() {
+  return executeCommands(secrets.map((secret) => {
+    const { key, iv, decryptedFilename } = secret;
+
+    return `
+      openssl aes-256-cbc \
+        -K ${key} \
+        -iv ${iv} \
+        -in ${decryptedFilename}.enc \
+        -out ${decryptedFilename} \
+        -d
+    `;
+  }));
+}
+
 function main() {
   const code = executeCommands([
     writeEnvFile('/hollowverse/env.json', 'default'),
     'cd /hollowverse',
-    `openssl aes-256-cbc \
-      -K ${KEY} \
-      -iv ${IV} \
-      -in gae-client-secret.json.enc \
-      -out gae-client-secret.json \
-      -d
-    `,
-    'cp ./gae-client-secret.json ./letsEncrypt',
-    `gcloud auth activate-service-account ${SERVICE_ACCOUNT} --key-file gae-client-secret.json`,
+    decryptSecrets,
+    'cp ./secrets/gcloud.letsEncrypt.json ./letsEncrypt',
+    `gcloud auth activate-service-account ${SERVICE_ACCOUNT} --key-file secrets/gcloud.travis.json`,
     tryDeploy,
   ]);
 
