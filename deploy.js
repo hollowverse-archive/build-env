@@ -22,7 +22,7 @@ function executeCommands(commands) {
     if (typeof command === 'function') {
       try {
         console.info(`${command.name}()`);
-      code = command();
+        code = command();
       } catch (e) {
         code = 1;
       }
@@ -58,7 +58,6 @@ const writeEnvFile = (path, service = 'default') => () => {
 }
 
 function deploy() {
-  let code = 0;
   const commands = [];
 
   if (BRANCH === 'master') {
