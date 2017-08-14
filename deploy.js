@@ -19,7 +19,11 @@ function executeCommands(commands) {
   for (let i = 0; i < commands.length && code === 0; i++) {
     let command = commands[i];
     if (typeof command === 'function') {
+      try {
       code = command();
+      } catch (e) {
+        code = 1;
+      }
     } else {
       command = command.replace('\n', '').replace(/\s+/g, ' ').trim();
       console.info(command);
