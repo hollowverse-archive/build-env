@@ -20,6 +20,7 @@ function executeCommands(commands) {
     let command = commands[i];
     if (typeof command === 'function') {
       try {
+        console.info(`${command.name}()`);
       code = command();
       } catch (e) {
         code = 1;
