@@ -16,7 +16,6 @@ const {
   ENC_IV_LETS_ENCRYPT_SERVICE_ACCOUNT,
   PROJECT,
   BRANCH,
-  SERVICE_ACCOUNT
 } = shelljs.env;
 
 /**
@@ -143,7 +142,7 @@ function main() {
     'cd /hollowverse',
     decryptSecrets,
     'mv ./secrets/gcloud.letsEncrypt.json ./letsEncrypt',
-    `gcloud auth activate-service-account ${SERVICE_ACCOUNT} --key-file secrets/gcloud.travis.json`,
+    `gcloud auth activate-service-account --key-file secrets/gcloud.travis.json`,
     tryDeploy,
   ]);
 
