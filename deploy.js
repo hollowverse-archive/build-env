@@ -142,7 +142,7 @@ function main() {
     writeEnvFile('/hollowverse/env.json', 'default'),
     'cd /hollowverse',
     decryptSecrets,
-    'cp ./secrets/gcloud.letsEncrypt.json ./letsEncrypt',
+    'mv ./secrets/gcloud.letsEncrypt.json ./letsEncrypt',
     `gcloud auth activate-service-account ${SERVICE_ACCOUNT} --key-file secrets/gcloud.travis.json`,
     tryDeploy,
   ]);
