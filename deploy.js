@@ -131,7 +131,8 @@ function decryptSecrets() {
         -iv ${iv} \
         -in ${decryptedFilename}.enc \
         -out ${decryptedFilename} \
-        -d
+        -d \
+        -base64
     `;
   }));
 }
