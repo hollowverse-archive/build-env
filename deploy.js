@@ -1,4 +1,4 @@
-#! /bin/node 
+#! /bin/node
 
 // Enable TS type checker for JavaScript
 // @ts-check
@@ -62,20 +62,20 @@ const writeEnvFile = (path, service = 'default') => () => {
     project: PROJECT,
     branch: BRANCH,
     service,
-  }
+  };
 
   return fs.writeFileSync(path, JSON.stringify(env, undefined, 2));
-}
+};
 
 function deploy() {
   const commands = [];
 
   if (BRANCH === 'master') {
     commands.push(
-      `gcloud app deploy letsEncrypt/app.yaml --project ${PROJECT} --version master`
+      `gcloud app deploy letsEncrypt/app.yaml --project ${PROJECT} --version master`,
     );
   }
-  
+
   commands.push(`
     gcloud app deploy app.yaml dispatch.yaml \
     --project ${PROJECT} \
@@ -90,7 +90,7 @@ function tryDeploy(maxNumAttempts = 5) {
   let numAttempts = 0;
   let code = 1;
 
-  while (numAttempts < maxNumAttempts)  {
+  while (numAttempts < maxNumAttempts) {
     numAttempts += 1;
     console.info(`Deploying... (attempt #${numAttempts})`);
 
@@ -122,10 +122,11 @@ const secrets = [
 ];
 
 function decryptSecrets() {
-  return executeCommands(secrets.map((secret) => {
-    const { key, iv, decryptedFilename } = secret;
+  return executeCommands(
+    secrets.map(secret => {
+      const { key, iv, decryptedFilename } = secret;
 
-    return `
+      return `
       openssl aes-256-cbc \
         -K ${key} \
         -iv ${iv} \
@@ -134,7 +135,8 @@ function decryptSecrets() {
         -d \
         -base64
     `;
-  }));
+    }),
+  );
 }
 
 function main() {
@@ -152,7 +154,7 @@ function main() {
   } else {
     console.error('Failed to deploy');
   }
-  
+
   // Required to inform CI of build result
   process.exit(code);
 }
