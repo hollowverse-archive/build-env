@@ -47,7 +47,7 @@ function executeCommands(commands) {
 }
 
 /**
- * Returns a function that writes a JSON file that contains various
+ * Writes a JSON file that contains various
  * information about App Engine configuration, including the branch name.
  *
  * This is working around the fact that App Engine does not provide this information
@@ -57,7 +57,7 @@ function executeCommands(commands) {
  * @param {string} path The path where the file should be written
  * @param {string} service The App Engine service name to be included in the env file
  */
-const writeEnvFile = (path, service = 'default') => () => {
+const writeEnvFile = (path, service = 'default') => {
   const env = {
     project: PROJECT,
     branch: BRANCH,
@@ -141,7 +141,7 @@ function decryptSecrets() {
 
 function main() {
   const code = executeCommands([
-    writeEnvFile('/hollowverse/env.json', 'default'),
+    () => writeEnvFile('/hollowverse/env.json', 'default'),
     'cd /hollowverse',
     decryptSecrets,
     'mv ./secrets/gcloud.letsEncrypt.json ./letsEncrypt',
