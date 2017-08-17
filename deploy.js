@@ -1,11 +1,22 @@
-#! /bin/node 
+#! /bin/node
 
 // Enable TS type checker for JavaScript
 // @ts-check
 
 const shelljs = require('shelljs');
+const fs = require('fs');
+const path = require('path');
 
-const { KEY, IV, PROJECT, BRANCH, SERVICE_ACCOUNT } = shelljs.env;
+const {
+  ENC_KEY_SUMO,
+  ENC_IV_SUMO,
+  ENC_KEY_TRAVIS_SERVICE_ACCOUNT,
+  ENC_IV_TRAVIS_SERVICE_ACCOUNT,
+  ENC_KEY_LETS_ENCRYPT_SERVICE_ACCOUNT,
+  ENC_IV_LETS_ENCRYPT_SERVICE_ACCOUNT,
+  PROJECT,
+  BRANCH,
+} = shelljs.env;
 
 /**
  * A helper function that executes shell commands or JavaScript functions.
@@ -19,7 +30,12 @@ function executeCommands(commands) {
   for (let i = 0; i < commands.length && code === 0; i++) {
     let command = commands[i];
     if (typeof command === 'function') {
-      code = command();
+      try {
+        console.info(`${command.name}()`);
+        code = command();
+      } catch (e) {
+        code = 1;
+      }
     } else {
       command = command.replace('\n', '').replace(/\s+/g, ' ').trim();
       console.info(command);
@@ -30,16 +46,36 @@ function executeCommands(commands) {
   return code;
 }
 
+/**
+ * Writes a JSON file that contains various
+ * information about App Engine configuration, including the branch name.
+ *
+ * This is working around the fact that App Engine does not provide this information
+ * as environment variables for Docker-based runtimes.
+ * The file should be written on CI and deployed with the app so that it can
+ * be accessed at runtime.
+ * @param {string} path The path where the file should be written
+ * @param {string} service The App Engine service name to be included in the env file
+ */
+const writeEnvFile = (path, service = 'default') => {
+  const env = {
+    project: PROJECT,
+    branch: BRANCH,
+    service,
+  };
+
+  return fs.writeFileSync(path, JSON.stringify(env, undefined, 2));
+};
+
 function deploy() {
-  let code = 0;
   const commands = [];
 
   if (BRANCH === 'master') {
     commands.push(
-      `gcloud app deploy letsEncrypt/app.yaml --project ${PROJECT} --version master`
+      `gcloud app deploy letsEncrypt/app.yaml --project ${PROJECT} --version master`,
     );
   }
-  
+
   commands.push(`
     gcloud app deploy app.yaml dispatch.yaml \
     --project ${PROJECT} \
@@ -54,7 +90,7 @@ function tryDeploy(maxNumAttempts = 5) {
   let numAttempts = 0;
   let code = 1;
 
-  while (numAttempts < maxNumAttempts)  {
+  while (numAttempts < maxNumAttempts) {
     numAttempts += 1;
     console.info(`Deploying... (attempt #${numAttempts})`);
 
@@ -67,18 +103,49 @@ function tryDeploy(maxNumAttempts = 5) {
   return code;
 }
 
+const secrets = [
+  {
+    key: ENC_KEY_SUMO,
+    iv: ENC_IV_SUMO,
+    decryptedFilename: 'sumo.json',
+  },
+  {
+    key: ENC_KEY_TRAVIS_SERVICE_ACCOUNT,
+    iv: ENC_KEY_TRAVIS_SERVICE_ACCOUNT,
+    decryptedFilename: 'gcloud.travis.json',
+  },
+  {
+    key: ENC_KEY_LETS_ENCRYPT_SERVICE_ACCOUNT,
+    iv: ENC_IV_LETS_ENCRYPT_SERVICE_ACCOUNT,
+    decryptedFilename: 'gcloud.letsEncrypt.json',
+  },
+];
+
+function decryptSecrets() {
+  return executeCommands(
+    secrets.map(secret => {
+      const { key, iv, decryptedFilename } = secret;
+
+      return `
+      openssl aes-256-cbc \
+        -K ${key} \
+        -iv ${iv} \
+        -in ${decryptedFilename}.enc \
+        -out ${decryptedFilename} \
+        -d \
+        -base64
+    `;
+    }),
+  );
+}
+
 function main() {
   const code = executeCommands([
+    () => writeEnvFile('/hollowverse/env.json', 'default'),
     'cd /hollowverse',
-    `openssl aes-256-cbc \
-      -K ${KEY} \
-      -iv ${IV} \
-      -in gae-client-secret.json.enc \
-      -out gae-client-secret.json \
-      -d
-    `,
-    'cp ./gae-client-secret.json ./letsEncrypt',
-    `gcloud auth activate-service-account ${SERVICE_ACCOUNT} --key-file gae-client-secret.json`,
+    decryptSecrets,
+    'mv ./secrets/gcloud.letsEncrypt.json ./letsEncrypt',
+    `gcloud auth activate-service-account --key-file secrets/gcloud.travis.json`,
     tryDeploy,
   ]);
 
@@ -87,7 +154,7 @@ function main() {
   } else {
     console.error('Failed to deploy');
   }
-  
+
   // Required to inform CI of build result
   process.exit(code);
 }
