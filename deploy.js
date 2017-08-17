@@ -133,7 +133,8 @@ function decryptSecrets() {
         -in ${decryptedFilename}.enc \
         -out ${decryptedFilename} \
         -d \
-        -base64
+        -base64 \
+        -pass pass:''
     `;
     }),
   );
