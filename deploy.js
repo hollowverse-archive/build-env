@@ -21,7 +21,7 @@ const {
 /**
  * A helper function that executes shell commands or JavaScript functions.
  * Simulates `set -e` behavior in shell, i.e. exits as soon as any commands fail
- * @param  {(string | Function)[]} commands
+ * @param  {(string | function(): (number | void))[]} commands
  * @return Exit code for the last executed command, a non-zero value indicates failure
  */
 function executeCommands(commands) {
