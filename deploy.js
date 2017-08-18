@@ -165,7 +165,7 @@ function main() {
     console.error('Failed to deploy');
     process.exit(1);
   }
-  
+
   // Required to inform CI of build result
   console.info('App deployed successfully');
   process.exit(0);
