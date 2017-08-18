@@ -31,9 +31,12 @@ function executeCommands(commands) {
     let command = commands[i];
     if (typeof command === 'function') {
       try {
-        console.info(`${command.name}()`);
-        code = command();
+        if (command.name) {
+          console.info(`${command.name}()`);
+        }
+        code = command() || 0;
       } catch (e) {
+        console.error(e);
         code = 1;
       }
     } else {
@@ -153,6 +156,7 @@ function main() {
   if (code === 0) {
     console.info('App deployed successfully');
   } else {
+    console.log(code);
     console.error('Failed to deploy');
   }
 
