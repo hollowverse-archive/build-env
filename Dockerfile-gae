@@ -31,6 +31,8 @@ RUN yarn
 
 ADD . .
 
+RUN mkdir /hollowverse
+
 # Decrypt the credentials we added to the repo using
 # the key we added with the Travis command line tool
 CMD node /deploy.js
