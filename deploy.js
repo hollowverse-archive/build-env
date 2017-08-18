@@ -21,7 +21,7 @@ const {
 /**
  * A helper function that executes shell commands or JavaScript functions.
  * Simulates `set -e` behavior in shell, i.e. exits as soon as any commands fail
- * @param  {(string | Function)[]} commands
+ * @param  {(string | function(): (number | void))[]} commands
  * @return Exit code for the last executed command, a non-zero value indicates failure
  */
 function executeCommands(commands) {
@@ -34,7 +34,12 @@ function executeCommands(commands) {
         if (command.name) {
           console.info(`${command.name}()`);
         }
-        code = command() || 0;
+        const result = command();
+        if (typeof result !== 'number') {
+          code = 0;
+        } else {
+          code = result;
+        }
       } catch (e) {
         console.error(e);
         code = 1;
@@ -146,22 +151,24 @@ function decryptSecrets() {
 function main() {
   const code = executeCommands([
     () => writeEnvFile('/hollowverse/env.json', 'default'),
-    () => shelljs.cd('/hollowverse'),
+    () => {
+      shelljs.cd('/hollowverse');
+    },
     decryptSecrets,
     'mv ./secrets/gcloud.letsEncrypt.json ./letsEncrypt',
     `gcloud auth activate-service-account --key-file secrets/gcloud.travis.json`,
     tryDeploy,
   ]);
 
-  if (code === 0) {
-    console.info('App deployed successfully');
-  } else {
+  if (code !== 0) {
     console.log(code);
     console.error('Failed to deploy');
+    process.exit(1);
   }
 
   // Required to inform CI of build result
-  process.exit(code);
+  console.info('App deployed successfully');
+  process.exit(0);
 }
 
 main();
