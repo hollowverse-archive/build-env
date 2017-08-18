@@ -34,7 +34,12 @@ function executeCommands(commands) {
         if (command.name) {
           console.info(`${command.name}()`);
         }
-        code = command() || 0;
+        const result = command();
+        if (typeof result !== 'number') {
+          code = 0;
+        } else {
+          code = result;
+        }
       } catch (e) {
         console.error(e);
         code = 1;
@@ -153,15 +158,15 @@ function main() {
     tryDeploy,
   ]);
 
-  if (code === 0) {
-    console.info('App deployed successfully');
-  } else {
+  if (code !== 0) {
     console.log(code);
     console.error('Failed to deploy');
+    process.exit(1);
   }
-
+  
   // Required to inform CI of build result
-  process.exit(code);
+  console.info('App deployed successfully');
+  process.exit(0);
 }
 
 main();
