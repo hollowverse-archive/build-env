@@ -80,7 +80,7 @@ function deploy() {
 
   if (BRANCH === 'master') {
     commands.push(
-      `gcloud app deploy letsEncrypt/app.yaml --project ${PROJECT} --version master`,
+      `gcloud app deploy letsEncrypt/app.yaml --project ${PROJECT} --version master --quiet`,
     );
   }
 
@@ -88,7 +88,8 @@ function deploy() {
     gcloud app deploy app.yaml dispatch.yaml \
     --project ${PROJECT} \
     --version ${BRANCH} \
-    --no-promote
+    --no-promote \
+    --quiet
   `);
 
   return executeCommands(commands);
