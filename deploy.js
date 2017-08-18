@@ -115,17 +115,17 @@ const secrets = [
   {
     key: ENC_KEY_SUMO,
     iv: ENC_IV_SUMO,
-    decryptedFilename: 'sumo.json',
+    decryptedFilename: 'secrets/sumo.json',
   },
   {
     key: ENC_KEY_TRAVIS_SERVICE_ACCOUNT,
     iv: ENC_KEY_TRAVIS_SERVICE_ACCOUNT,
-    decryptedFilename: 'gcloud.travis.json',
+    decryptedFilename: 'secrets/gcloud.travis.json',
   },
   {
     key: ENC_KEY_LETS_ENCRYPT_SERVICE_ACCOUNT,
     iv: ENC_IV_LETS_ENCRYPT_SERVICE_ACCOUNT,
-    decryptedFilename: 'gcloud.letsEncrypt.json',
+    decryptedFilename: 'secrets/gcloud.letsEncrypt.json',
   },
 ];
 
