@@ -31,15 +31,26 @@ function executeCommands(commands) {
     let command = commands[i];
     if (typeof command === 'function') {
       try {
-        console.info(`${command.name}()`);
-        code = command();
+        if (command.name) {
+          console.info(`${command.name}()`);
+        }
+        code = command() || 0;
       } catch (e) {
+        console.error(e);
         code = 1;
       }
     } else {
       command = command.replace('\n', '').replace(/\s+/g, ' ').trim();
       console.info(command);
-      code = shelljs.exec(command).code;
+      const result = shelljs.exec(command);
+      const { stdout, stderr } = result;
+      code = result.code
+      if (stdout) {
+        console.info(stdout);
+      }
+      if (stderr) {
+        console.error(stderr);
+      }
     }
   }
 
@@ -153,6 +164,7 @@ function main() {
   if (code === 0) {
     console.info('App deployed successfully');
   } else {
+    console.log(code);
     console.error('Failed to deploy');
   }
 
