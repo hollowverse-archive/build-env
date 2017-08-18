@@ -42,15 +42,7 @@ function executeCommands(commands) {
     } else {
       command = command.replace('\n', '').replace(/\s+/g, ' ').trim();
       console.info(command);
-      const result = shelljs.exec(command);
-      const { stdout, stderr } = result;
-      code = result.code
-      if (stdout) {
-        console.info(stdout);
-      }
-      if (stderr) {
-        console.error(stderr);
-      }
+      code = shelljs.exec(command).code;
     }
   }
 
