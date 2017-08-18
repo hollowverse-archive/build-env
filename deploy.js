@@ -119,7 +119,7 @@ const secrets = [
   },
   {
     key: ENC_KEY_TRAVIS_SERVICE_ACCOUNT,
-    iv: ENC_KEY_TRAVIS_SERVICE_ACCOUNT,
+    iv: ENC_IV_TRAVIS_SERVICE_ACCOUNT,
     decryptedFilename: 'secrets/gcloud.travis.json',
   },
   {
