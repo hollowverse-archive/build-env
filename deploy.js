@@ -151,7 +151,9 @@ function decryptSecrets() {
 function main() {
   const code = executeCommands([
     () => writeEnvFile('/hollowverse/env.json', 'default'),
-    () => shelljs.cd('/hollowverse'),
+    () => {
+      shelljs.cd('/hollowverse');
+    },
     decryptSecrets,
     'mv ./secrets/gcloud.letsEncrypt.json ./letsEncrypt',
     `gcloud auth activate-service-account --key-file secrets/gcloud.travis.json`,
