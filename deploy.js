@@ -8,12 +8,9 @@ const fs = require('fs');
 const path = require('path');
 
 const {
-  ENC_KEY_SUMO,
-  ENC_IV_SUMO,
-  ENC_KEY_TRAVIS_SERVICE_ACCOUNT,
-  ENC_IV_TRAVIS_SERVICE_ACCOUNT,
-  ENC_KEY_LETS_ENCRYPT_SERVICE_ACCOUNT,
-  ENC_IV_LETS_ENCRYPT_SERVICE_ACCOUNT,
+  ENC_PASS_TRAVIS,
+  ENC_PASS_LETS_ENCRYPT,
+  ENC_PASS_SUMO,
   PROJECT,
   BRANCH,
 } = shelljs.env;
@@ -114,18 +111,15 @@ function tryDeploy(maxNumAttempts = 5) {
 
 const secrets = [
   {
-    key: ENC_KEY_SUMO,
-    iv: ENC_IV_SUMO,
+    password: ENC_PASS_LETS_ENCRYPT,
     decryptedFilename: 'secrets/sumo.json',
   },
   {
-    key: ENC_KEY_TRAVIS_SERVICE_ACCOUNT,
-    iv: ENC_IV_TRAVIS_SERVICE_ACCOUNT,
+    password: ENC_PASS_TRAVIS,
     decryptedFilename: 'secrets/gcloud.travis.json',
   },
   {
-    key: ENC_KEY_LETS_ENCRYPT_SERVICE_ACCOUNT,
-    iv: ENC_IV_LETS_ENCRYPT_SERVICE_ACCOUNT,
+    password: ENC_PASS_SUMO,
     decryptedFilename: 'secrets/gcloud.letsEncrypt.json',
   },
 ];
@@ -133,17 +127,15 @@ const secrets = [
 function decryptSecrets() {
   return executeCommands(
     secrets.map(secret => {
-      const { key, iv, decryptedFilename } = secret;
+      const { password, decryptedFilename } = secret;
 
       return `
       openssl aes-256-cbc \
-        -K ${key} \
-        -iv ${iv} \
         -in ${decryptedFilename}.enc \
         -out ${decryptedFilename} \
         -d \
         -base64 \
-        -pass pass:''
+        -pass pass:${password}
     `;
     }),
   );
