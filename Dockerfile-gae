@@ -25,14 +25,12 @@ RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 RUN apt-get update
 RUN apt-get install google-cloud-sdk nodejs yarn -y
 
-ADD package.json yarn.lock ./
+RUN mkdir /repo
 
+WORKDIR /repo
+
+# Install dependencies for the mounted project, so that
+# the dependencies of the deploy script are satisfied.
 RUN yarn
 
-ADD . .
-
-RUN mkdir /hollowverse
-
-# Decrypt the credentials we added to the repo using
-# the key we added with the Travis command line tool
-CMD node /deploy.js
+CMD node deploy.js

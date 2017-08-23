@@ -9,16 +9,8 @@ An environment image is an image that contains all the tools needed to deploy th
 The continuous deployment process is [documented in detail on Medium](https://medium.com/hollowverse/automating-deployment-to-google-app-engine-with-docker-and-travis-b8a8edb3ec31).
 
 ## `Dockerfile-gae`
-This Docker image contains the Google Cloud SDK (`gcloud` command line tool) and expects that the source code is mounted at `/hollowverse` inside the container.
+This Docker image contains the Google Cloud SDK (`gcloud` command line tool) and expects that the source code is mounted at `/repo` inside the container.
 
-The source code is deployed from inside this environment image to Google App Engine.
+It is expected that the mounted source code directory contains a `deploy.js` file that performs the deployment tasks specific to each project.
 
-The following environment variables are required at runtime:
-
-* `PROJECT`: The project ID in Google Cloud Platform (e.g. `hollowverse-c9cad`).
-* `BRANCH`: The App Engine version to deploy (e.g. `beta`, `master`...).
-* `SERVICE_ACCOUNT`: The Google Cloud Platform service account used to deploy the image. It looks like an email address and can be obtained or created in the GCP web interface. This account must have permission to deploy.
-* `KEY`: The encryption key required to decrypt the service account client secret to authenticate the service account and obtain the required permissions to deploy. The client secret is expected to be stored encrypted as `gae-client-secret.json.enc` at the root of the source code folder.
-* `IV`: The initialization vector for the encryption key.
-
-
+Any required environment variables should be defined in the project settings on Travis and passed to the environment container via the run command in `.travis.yaml`. Refer to [`.travis.yaml`](https://github.com/hollowverse/hollowverse/blob/master/.travis.yml) in [hollowverse/hollowverse](https://github.com/hollowverse/hollowverse/) and [`.travis.yaml`](https://github.com/hollowverse/lets-encrypt/blob/master/.travis.yml) in [hollowverse/lets-encrypt](https://github.com/hollowverse/lets-encrypt/) for examples on how to do that.
