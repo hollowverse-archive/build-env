@@ -23,7 +23,7 @@ RUN \
 RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 
 RUN apt-get update
-RUN apt-get install google-cloud-sdk nodejs yarn -y
+RUN apt-get install google-cloud-sdk nodejs yarn git -y
 
 RUN mkdir /repo
 
