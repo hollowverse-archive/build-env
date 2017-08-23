@@ -1,9 +1,9 @@
 FROM ubuntu:16.04
 
 # Install prerequisites
-RUN apt-get update && apt-get upgrade -y
+RUN apt-get update -qq && apt-get upgrade -y -qq
 
-RUN apt-get install -y curl openssl lsb-release
+RUN apt-get install -qq -y curl openssl lsb-release
 
 # Add Node.js source
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
@@ -22,8 +22,7 @@ RUN \
 # Import the Google Cloud public key
 RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 
-RUN apt-get update
-RUN apt-get install google-cloud-sdk nodejs yarn git -y
+RUN apt-get update -qq && apt-get install google-cloud-sdk nodejs yarn git -y -qq
 
 RUN mkdir /repo
 
