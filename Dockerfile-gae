@@ -1,9 +1,20 @@
 FROM ubuntu:16.04
+ENV OPENSSL_VERSION=1.1.0f
+ENV LINUX_VERSION=4.11.0-14-generic
 
 # Install prerequisites
 RUN apt-get update -qq && apt-get upgrade -y -qq
 
-RUN apt-get install -qq -y curl openssl lsb-release
+RUN apt-get install -y curl lsb-release wget build-essential linux-headers-$LINUX_VERSION
+
+# Get OpenSSL 1.1.0f source, compile and install
+
+RUN wget https://www.openssl.org/source/openssl-$OPENSSL_VERSION.tar.gz
+RUN tar xfz ./openssl-$OPENSSL_VERSION.tar.gz
+WORKDIR /openssl-$OPENSSL_VERSION
+RUN ./config -Wl,--enable-new-dtags,-rpath,'$(LIBRPATH)'
+RUN make && make install
+WORKDIR /
 
 # Add Node.js source
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
@@ -28,6 +39,9 @@ RUN mkdir /repo
 
 WORKDIR /repo
 
+# Replace default shell with bash
+RUN ln -s -f /bin/bash /bin/sh
+
 # Install dependencies for the mounted project, so that
 # the dependencies of the deploy script are satisfied.
-CMD yarn --prod && node deploy.js
+CMD yarn && node deploy.js
