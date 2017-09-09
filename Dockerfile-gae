@@ -3,9 +3,9 @@ ENV OPENSSL_VERSION=1.1.0f
 ENV LINUX_VERSION=4.11.0-14-generic
 
 # Install prerequisites
-RUN apt-get update && apt-get upgrade -y
+RUN apt-get update -qq && apt-get upgrade -y -qq
 
-RUN apt-get install -y curl lsb-release wget build-essential linux-headers-$LINUX_VERSION
+RUN apt-get install -qq -y curl lsb-release wget build-essential linux-headers-$LINUX_VERSION
 
 # Get OpenSSL 1.1.0f source, compile and install
 RUN wget https://www.openssl.org/source/openssl-$OPENSSL_VERSION.tar.gz
@@ -22,8 +22,8 @@ RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
 
-RUN apt-get update
-RUN apt-get install nodejs yarn git -y
+RUN apt-get update -qq
+RUN apt-get install nodejs yarn git -y -qq
 
 RUN mkdir /repo
 
