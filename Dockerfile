@@ -28,6 +28,9 @@ RUN apt-get install nodejs yarn git python-pip -y -qq
 # Install AWS Elastic Beanstalk CLI Tool using pip
 RUN pip install awsebcli --upgrade --user
 
+# Export path containing the AWS EB CLI tool
+ENV PATH=$PATH:~/.local/bin
+
 RUN mkdir /repo
 
 WORKDIR /repo
