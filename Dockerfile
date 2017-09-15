@@ -23,7 +23,10 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
 
 RUN apt-get update -qq
-RUN apt-get install nodejs yarn git -y -qq
+RUN apt-get install nodejs yarn git python-pip -y -qq
+
+# Install AWS Elastic Beanstalk CLI Tool using pip
+RUN pip install awsebcli --upgrade --user
 
 RUN mkdir /repo
 
