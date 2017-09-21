@@ -3,14 +3,9 @@ FROM node:alpine
 RUN apk update && apk add git py2-pip openssl
 
 # Install AWS Elastic Beanstalk CLI Tool using pip
-RUN pip install awsebcli --upgrade --user
+RUN pip install awsebcli --upgrade
 
 ENV NODE_ENV=development
-
-# Export path containing the AWS EB CLI tool
-ENV PATH=$PATH:~/.local/bin
-
-RUN mkdir /repo
 
 WORKDIR /repo
 
