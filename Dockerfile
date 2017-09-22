@@ -1,9 +1,9 @@
 FROM node:alpine
 
-RUN apk update && apk add git py2-pip openssl
+RUN apk update -q && apk add git py2-pip openssl -q
 
 # Install AWS Elastic Beanstalk CLI Tool using pip
-RUN pip install awsebcli --upgrade
+RUN pip install awsebcli -q --upgrade
 
 ENV NODE_ENV=development
 
