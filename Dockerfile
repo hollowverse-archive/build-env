@@ -1,6 +1,11 @@
 FROM node:8.9-alpine
 
-RUN apk update -q && apk add git py2-pip openssl -q
+RUN apk update -q
+
+RUN apk add -q --no-cache git py2-pip openssl
+
+# Native dependencies required to compile some Node.js packages
+RUN apk add -q --no-cache make gcc g++ python
 
 # Install AWS Elastic Beanstalk CLI Tool using pip
 RUN pip install awsebcli -q --upgrade
