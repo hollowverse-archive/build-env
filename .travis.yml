@@ -5,8 +5,9 @@ services:
 
 script:
   - docker build -t hollowverse/build-env ./
+  - docker build -t hollowverse/build-env:lambda ./ --file Dockerfile-lambda
   - if [[ ($TRAVIS_PULL_REQUEST == "false") && ($TRAVIS_BRANCH == "master") ]]; then 
-      docker login -u "${DOCKER_USER}" -p "${DOCKER_PASS}" && docker push hollowverse/build-env;
+      docker login -u "${DOCKER_USER}" -p "${DOCKER_PASS}" && docker push hollowverse/build-env && docker push hollowverse/build-env:lambda;
     fi
 
 notifications:

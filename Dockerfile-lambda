@@ -1,0 +1,9 @@
+FROM lambci/lambda:build-nodejs6.10
+
+RUN npm i --global @babel/core @babel/node
+
+WORKDIR /repo
+
+# Install dependencies for the mounted project, so that
+# the dependencies of the deploy script are satisfied.
+CMD npm i && babel-node --only '**/@hollowverse/**/*.js,./deploy.js' deploy.js
