@@ -1,6 +1,10 @@
 FROM lambci/lambda:build-nodejs6.10
 
-RUN apk update && apk add yarn
+RUN touch ~/.profile
+
+RUN curl -o- -L https://yarnpkg.com/install.sh | bash
+
+ENV PATH="/root/.yarn/bin:/root/.config/yarn/global/node_modules/.bin:$PATH"
 
 WORKDIR /repo
 
