@@ -18,10 +18,10 @@ Any required environment variables should be defined in the project settings on 
 
 ## `Dockerfile-lambda`
 
-Similar to the regular `Dockerfile`, except that it runs Node.js 6 instead in order to emulate the AWS Lambda environment.
+Similar to the regular `Dockerfile`, except that it runs Node.js 6 instead in order to emulate the AWS Lambda environment. It also expects that you have a script in your `package.json` named `"deploy"` which performs the deployment tasks.
 
 The image can be pulled using `docker pull hollowverse/build-env:lambda`.
 
-Because version 6 of Node.js is quite outdated and lacks many of the features of JavaScript we have come to expect, we use babel to transpile the `deploy.js` file before executing it. This means that you can safely use modern JS syntax and features to write the deployment script, provided that your repository provides the required Babel configuration settings, either via a `.babelrc` file, or as a `babel` field in `package.json`. The required babel plugins must also be defined in `package.json`.
+Because version 6 of Node.js is quite outdated and lacks many of the features of JavaScript we have come to expect, you may want to use babel to transpile the deployment script file before executing it. This way, you can safely use modern JS syntax and features to write the deployment script, provided that your repository provides the required Babel packages and configuration settings. This image does not install any Babel packages for you.
 
 For an example of a repository that uses this image, check out [`perf-monitor`](https://github.com/hollowverse/perf-monitor)
