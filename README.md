@@ -10,7 +10,7 @@ The image contains all the tools needed to deploy the application. It does not c
 
 This Docker image expects that the source code is mounted at `/repo` inside the container.
 
-It is expected that the mounted source code directory contains a `deploy.js` file that performs the deployment tasks specific to each project.
+It is expected that the mounted source code directory has a `package.json` file at the root with a script named `"deploy"` which performs the deployment tasks.
 
 The image can be pulled using `docker pull hollowverse/build-env`.
 
@@ -24,4 +24,4 @@ The image can be pulled using `docker pull hollowverse/build-env:lambda`.
 
 Because version 6 of Node.js is quite outdated and lacks many of the features of JavaScript we have come to expect, you may want to use babel to transpile the deployment script file before executing it. This way, you can safely use modern JS syntax and features to write the deployment script, provided that your repository provides the required Babel packages and configuration settings. This image does not install any Babel packages for you.
 
-For an example of a repository that uses this image, check out [`perf-monitor`](https://github.com/hollowverse/perf-monitor)
+For an example of a repository that uses this image, check out [`track-performance`](https://github.com/hollowverse/track-performance)

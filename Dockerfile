@@ -16,4 +16,4 @@ WORKDIR /repo
 
 # Install dependencies for the mounted project, so that
 # the dependencies of the deploy script are satisfied.
-CMD yarn && node deploy.js
+CMD yarn && yarn deploy
