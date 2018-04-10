@@ -1,0 +1,17 @@
+FROM lambci/lambda:build-nodejs6.10
+
+RUN touch ~/.profile
+
+RUN curl -o- -L https://yarnpkg.com/install.sh | bash
+
+ENV PATH="/root/.yarn/bin:/root/.config/yarn/global/node_modules/.bin:$PATH"
+
+RUN node --version
+RUN npm --version
+RUN yarn --version
+
+WORKDIR /repo
+
+# Install dependencies for the mounted project, so that
+# the dependencies of the deploy script are satisfied.
+CMD yarn && yarn deploy
