@@ -11,7 +11,7 @@ script:
       docker login -u "${DOCKER_USER}" -p "${DOCKER_PASS}" && 
       docker push hollowverse/build-env && 
       docker push hollowverse/build-env:lambda && 
-      docker push hollowverse/build-env:lambda6;
+      docker push hollowverse/build-env:lambda-6;
     fi
 
 notifications:
