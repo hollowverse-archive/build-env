@@ -8,9 +8,9 @@ script:
   - docker build -t hollowverse/build-env:lambda ./ --file Dockerfile-lambda
   - docker build -t hollowverse/build-env:lambda-6 ./ --file Dockerfile-lambda-6
   - if [[ ($TRAVIS_PULL_REQUEST == "false") && ($TRAVIS_BRANCH == "master") ]]; then 
-      docker login -u "${DOCKER_USER}" -p "${DOCKER_PASS}" && \
-      docker push hollowverse/build-env && \
-      docker push hollowverse/build-env:lambda && \
+      docker login -u "${DOCKER_USER}" -p "${DOCKER_PASS}" && 
+      docker push hollowverse/build-env && 
+      docker push hollowverse/build-env:lambda && 
       docker push hollowverse/build-env:lambda6;
     fi
 
