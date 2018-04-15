@@ -14,4 +14,4 @@ WORKDIR /repo
 
 # Install dependencies for the mounted project, so that
 # the dependencies of the deploy script are satisfied.
-CMD yarn && yarn deploy
+CMD yarn --frozen-lockfile && yarn deploy
