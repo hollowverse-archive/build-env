@@ -11,6 +11,7 @@ RUN apk add -q --no-cache make gcc g++ python openssl-dev curl-dev
 RUN pip install awsebcli -q --upgrade
 
 ENV NODE_ENV=development
+ENV FORCE_COLOR=true
 
 WORKDIR /repo
 
