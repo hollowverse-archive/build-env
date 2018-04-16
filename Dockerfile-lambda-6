@@ -5,6 +5,8 @@ RUN touch ~/.profile
 RUN curl -o- -L https://yarnpkg.com/install.sh | bash
 
 ENV PATH="/root/.yarn/bin:/root/.config/yarn/global/node_modules/.bin:$PATH"
+ENV NODE_ENV=development
+ENV FORCE_COLOR=true
 
 RUN node --version
 RUN npm --version
