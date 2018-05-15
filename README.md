@@ -31,3 +31,7 @@ For an example of a repository that uses this image, check out [`track-performan
 ## Architecture
 
 This repository plays an important role in the deployment architecture of Hollowverse. You can read more about it in our [architecture documentation](https://github.com/hollowverse/architecture#readme)
+
+---
+
+[If you'd like to tell us something, or need help with anything...](https://github.com/hollowverse/hollowverse/wiki/Help)
